@@ -1,0 +1,127 @@
+class AXIS:
+  reg_list=[]
+  id=""
+  def __init__(self):
+   self.count=0
+  def register(self,n,id,password):
+    self.name=n
+    if AXIS.id==id:
+     print("Sorry! ID is already registered under AXIS")
+    else:
+      AXIS.id=id
+      self.id=AXIS.id
+    self.password=password
+    self.l=[self.name,self.id,self.password]
+    AXIS.reg_list.append(self.l)
+
+  def register_info(self,find):
+    self.find=find
+    for i in AXIS.reg_list:
+      if self.find in i:
+        self.count+=1
+        return "Registered"
+      else:
+        print("You are not registered yet!!!")
+    
+  def show_students_info(self,lo):
+    print(f"Number of students registerd in AXIS:{self.count}")
+    print(f"Number of students who are able to take courses this semester:{Student.coursetaker}")
+    print(f"Number of students who will get scholarships:{Student.scholarship}")
+
+
+    
+
+class Student:
+  scholarship=0
+  coursetaker=0
+  ct100=0
+  ct75=0
+  ct50=0
+  ct25=0
+  ct=10
+  s_dict={}
+  def __init__(self,name,id,cgpa,sem):
+    self.lt=AXIS.reg_list
+    self.name=name
+    self.id=id
+    self.cgpa=cgpa
+    self.sem=sem
+
+  def add_courses(self,course):
+    self.course=[]
+   
+    x=r1.register_info(self.name)
+    self.b=False
+    if x=="Registered":
+      if self.cgpa<1.5:
+        print("You are not allowed to add courses this semester.")
+      elif 1.5<=self.cgpa<3.5:
+        if 2<=len(course)<=4:
+          Student.coursetaker+=1
+          self.b=True
+          self.course=course
+        else:
+          print("Please take max:4 or min:2 courses")
+      elif self.cgpa>=3.5:
+         if 2<=len(course)<=5:
+          Student.coursetaker+=1
+          self.b=True
+          self.course=course
+         else:
+          print("Please take max:5 or min:2 courses")
+
+  def scholarship_calculation(self):
+    if self.b==True:
+      if 3.80<=self.cgpa<=4.00:
+        Student.scholarship+=1
+        if self.cgpa==4.00:
+          self.scholarship="100%"
+          Student.ct100+=1
+          Student.s_dict[self.scholarship]=Student.ct100
+          
+        elif 3.95<=self.cgpa<4.00:
+          self.scholarship='75%'
+          Student.ct75+=1
+          Student.s_dict[self.scholarship]=Student.ct75
+
+        elif 3.90<=self.cgpa<3.95:
+          self.scholarship='50%'
+          Student.ct50+=1
+          Student.s_dict[self.scholarship]=Student.ct50
+
+        elif 3.85<=self.cgpa<3.90:
+          self.scholarship='25%'
+          Student.ct25+=1
+          Student.s_dict[self.scholarship]=Student.ct25
+        elif 3.80<=self.cgpa<3.85:
+          self.scholarship='10%'
+          Student.ct10+=1
+          Student.s_dict[self.scholarship]=Student.ct10
+      else:
+        self.scholarship=None
+
+  def student_details(self):
+    if len(self.course)==0:
+      self.course=None
+      self.scholarship=None
+    print(f"Name: {self.name}\nID:{self.id}\nCGPA:{self.cgpa}\nCurrent Semester:{self.sem}\nCourses taken {self.course}")
+    print(f"Scholarship:{self.scholarship}")
+    
+
+
+r1=AXIS()
+names=input("Enter Student Name: ")
+id=input("Enter Student ID: ")   
+password=input("Enter Password: ")
+r1.register(names,id,password)
+
+name=input("Search Your Name: ")
+id=input("ID: ")
+cgpa=float(input("CGPA: "))
+sem=input("Semester: ")   
+s1=Student(name,id,cgpa,sem)
+course=eval(input("Enter your courses: "))
+s1.add_courses(course) #['CSE470','CSE490','CSE481','EEE370']
+s1.scholarship_calculation()
+s1.student_details()
+r1.show_students_info(s1)
